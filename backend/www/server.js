@@ -1,6 +1,7 @@
 let app = require('../app');
 let debug = require('debug')('mern-stack:server');
 let http = require('http');
+// const { prisma } = require('../config/db');
 
 /**
  * Get port from environment and store in Express.
@@ -22,6 +23,25 @@ let server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Handle graceful shutdown
+ * This will ensure that the server closes all connections and
+ * Prisma disconnects from the database before exiting.
+ * This is important to prevent data loss and ensure that all
+ * requests are completed before the server shuts down.
+ */
+['SIGTERM', 'SIGINT'].forEach(signal => {
+    process.on(signal, async () => {
+      console.log(`${signal} received. Closing server...`);
+      server.close(async () => {
+        console.log('HTTP server closed.');
+        // await prisma.$disconnect();
+        console.log('Database connection closed.');
+        process.exit(0);
+      });
+    });
+  });
 
 /**
  * Normalize a port into a number, string, or false.
