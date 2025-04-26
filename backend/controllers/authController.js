@@ -8,12 +8,17 @@ const register = [
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 6 }),
   async (req, res) => {
+    console.log('Registering user');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+
+    if(!role) {
+      return res.status(400).json({ error: 'Role is required' });
+    }
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -22,7 +27,7 @@ const register = [
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: { email, password: hashedPassword, role: req.body.role || 'user' },
+      data: { email, password: hashedPassword, role: role || 'user' },
     });
 
     res.status(201).json({ message: 'User registered' });
@@ -60,12 +65,13 @@ const refreshToken = async (req, res) => {
   }
 
   try {
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const accessToken = getAccessToken(payload.id);
+    const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const user = await prisma.user.findUnique({ where: { id: payload.id } });
     if (!user) {
       return res.status(401).json({ error: 'Invalid refresh token' });
     }
+    const accessToken = getAccessToken(payload.id);
+
     res.status(201).json({ accessToken });
   } catch (err) {
     res.status(401).json({ error: 'Invalid refresh token' });

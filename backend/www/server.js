@@ -1,6 +1,7 @@
 let app = require('../app');
 let debug = require('debug')('mern-stack:server');
 let http = require('http');
+const { prisma } = require('../config/db');
 // const { prisma } = require('../config/db');
 
 /**
@@ -36,7 +37,7 @@ server.on('listening', onListening);
       console.log(`${signal} received. Closing server...`);
       server.close(async () => {
         console.log('HTTP server closed.');
-        // await prisma.$disconnect();
+        await prisma.$disconnect();
         console.log('Database connection closed.');
         process.exit(0);
       });

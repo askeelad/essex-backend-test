@@ -177,11 +177,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgres://user:password@localhost:5432/hospital_db"
+        "value": null
       }
     }
   },
