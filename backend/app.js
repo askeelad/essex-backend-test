@@ -16,10 +16,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(cors());
 app.use(bodyParser.json());
 
-// ✅ Add express-session middleware BEFORE passport
+//Add express-session middleware
 app.use(
   session({
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
