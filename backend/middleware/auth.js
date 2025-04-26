@@ -21,4 +21,11 @@ passport.use(
   })
 );
 
-module.exports = { authMiddleware: passport.authenticate('jwt', { session: false }) };
+const isAdminMiddleware = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Admin access required' });
+}
+
+module.exports = { authMiddleware: passport.authenticate('jwt', { session: false }), isAdminMiddleware };

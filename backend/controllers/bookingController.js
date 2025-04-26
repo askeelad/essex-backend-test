@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { param, validationResult } = require('express-validator');
 const { prisma } = require('../config/db');
 
 const getHospitals = async (req, res) => {
@@ -9,14 +9,16 @@ const getHospitals = async (req, res) => {
 };
 
 const getServicesAndSlots = [
-  body('hospitalId').isInt(),
+  param('hospitalId').isInt(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    const { hospitalId } = req.body;
+    const { hospitalId } = req.params;
+    if (!hospitalId) {
+      return res.status(400).json({ error: 'Hospital ID is required' });
+    }
 
     const services = await prisma.service.findMany({
       where: { hospitalId: parseInt(hospitalId) },
@@ -32,15 +34,15 @@ const getServicesAndSlots = [
 ];
 
 const bookAppointment = [
-  body('serviceId').isInt(),
-  body('timeSlotId').isInt(),
+   param('serviceId').isInt(),
+   param('timeSlotId').isInt(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { serviceId, timeSlotId } = req.body;
+    const { serviceId, timeSlotId } = req.params;
     const user = req.user;
 
     const service = await prisma.service.findUnique({ where: { id: parseInt(serviceId) } });
@@ -55,14 +57,14 @@ const bookAppointment = [
 
     const booking = await prisma.$transaction(async (prisma) => {
       await prisma.timeSlot.update({
-        where: { id: timeSlotId },
+        where: { id: timeSlot.id },
         data: { isBooked: true },
       });
 
       return prisma.booking.create({
         data: {
           userId: user.id,
-          timeSlotId,
+          timeSlotId: timeSlot.id,
         },
       });
     });
