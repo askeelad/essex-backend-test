@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { z } from 'zod';
 import api from '../../lib/api';
-import NoiseBackground from '../../components/NoiseBackground';
 
 const schema = z.object({
   email: z.string().email(),
@@ -28,6 +27,7 @@ export default function Login() {
       schema.parse({ email, password });
       const { data } = await api.post('/login', { email, password });
       localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('role', data.role);
       router.push('/hospitals');
     } catch (err: any) {
       if (err instanceof z.ZodError) {
@@ -42,7 +42,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
-      <NoiseBackground />
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md z-10">
         <h1 className="text-3xl font-bold mb-6 text-primary">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -70,7 +69,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-secondary text-white py-2 rounded-lg font-semibold ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transition'}`}
+            className={`w-full bg-black text-white py-2 rounded-lg font-semibold ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transition'}`}
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>

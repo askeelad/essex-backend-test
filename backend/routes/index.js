@@ -28,6 +28,6 @@ router.post('/admin/timeslot', authMiddleware, isAdminMiddleware, createTimeSlot
 //Booking Routes
 router.get('/hospitals', authMiddleware, getHospitals);
 router.get('/services/:hospitalId', authMiddleware, getServicesAndSlots);
-router.get('/book/:serviceId/:timeSlotId', authMiddleware, bookAppointment);
+router.post('/book/:serviceId/:timeSlotId', authMiddleware, bookAppointment);
 
 module.exports = router;

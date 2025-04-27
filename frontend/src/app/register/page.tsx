@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import api from '../../lib/api';
-import NoiseBackground from '../../components/NoiseBackground';
 import Link from 'next/link';
 
 const schema = z.object({
@@ -25,7 +24,7 @@ export default function Register() {
 
     try {
       schema.parse({ email, password });
-      await api.post('/register', { email, password });
+      await api.post('/register', { email, password, role: 'user' });
       router.push('/login');
     } catch (err) {
       setError('Registration failed or validation error');
@@ -36,7 +35,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
-      <NoiseBackground />
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md z-10">
         <h1 className="text-3xl font-bold mb-6 text-primary">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -64,7 +62,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-secondary text-white py-2 rounded-lg font-semibold ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transition'}`}
+            className={`w-full bg-black text-white py-2 rounded-lg font-semibold ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transition'}`}
           >
             {isLoading ? 'Registering...' : 'Register'}
           </button>

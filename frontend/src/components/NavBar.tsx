@@ -11,7 +11,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-primary text-white p-4 shadow-lg">
+    <nav className="bg-primary text-black-200 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/hospitals" className="text-xl font-bold">
           Hospital Booking
