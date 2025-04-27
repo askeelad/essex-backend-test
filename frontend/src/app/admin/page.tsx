@@ -34,7 +34,8 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('role'); // or whatever key you used
+    const storedRole = localStorage.getItem('role');
+    console.log("Stored Role:", storedRole);
     if (storedRole !== 'admin') {
       router.push('/login');
     }

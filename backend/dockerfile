@@ -1,4 +1,4 @@
-# Use official Node.js 18 LTS as the base image
+# Use official Node.js 20  as the base image
 FROM node:20
 
 # Set working directory
@@ -6,6 +6,11 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Copy prisma folder early (before npm install)
+COPY prisma ./prisma
+COPY .env .env
+
 
 # Install dependencies
 RUN npm install

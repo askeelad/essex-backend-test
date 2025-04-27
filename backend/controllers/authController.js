@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { prisma } = require('../config/db');
 const { getAccessToken, getRefreshToken } = require('../utils/token');
 
@@ -54,7 +54,7 @@ const login = [
     const refreshToken = getRefreshToken(user.id);
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: false, sameSite: 'strict' });
-    res.status(201).json({ accessToken });
+    res.status(201).json({ accessToken, role: user.role });
   },
 ];
 

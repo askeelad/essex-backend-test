@@ -7,7 +7,7 @@ const { prisma } = require('../config/db');
 /**
  * Get port from environment and store in Express.
  */
-
+console.log("DATABASE_URL:", process.env.DATABASE_URL)
 let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
