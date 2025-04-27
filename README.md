@@ -19,6 +19,7 @@ typescript	Static typing for better development and production quality.
 eslint, eslint-config-next	Enforce clean, consistent code.
 tailwindcss, postcss, @tailwindcss/postcss	Utility-first CSS framework for rapid and responsive UI development.
 @types/*	TypeScript support for Node and React packages.
+
 🛠️ Backend Dependencies (Express.js)
 
 Package	Why It’s Used	Alternatives	Why This One Wins
@@ -38,20 +39,6 @@ Package	Why It’s Used
 nodemon	Auto-restarts server on file changes during development.
 prisma	ORM toolkit for migrations, seeding, and schema management.
 🚦 API Routes Documentation
-🛡️ IMPORTANT: ADMIN SECTION
-🚨 The Admin Routes (/admin/...) were specifically added to greatly simplify the setup and testing process.
-This allows admins to create hospitals, services, and time slots quickly without manually inserting records into the database.
-
-✅ Why?
-
-Makes real-world testing and QA much smoother.
-
-Allows simulation of a full booking flow without DB seeding.
-
-Admins can dynamically set up environments based on need.
-
-This massively improves developer velocity and testing realism.
-
 Method	Route	Description	Middleware
 POST	/register	Register a new user.	-
 POST	/login	Authenticate user and issue JWT token.	-
@@ -70,6 +57,18 @@ Route Protections
 authMiddleware: Validates user JWT and attaches user info to request.
 
 isAdminMiddleware: Ensures only admin users can access admin-specific endpoints.
+
+🛡️ IMPORTANT: FRONTEND ADMIN SECTION
+  🚨 The Admin Routes (/admin) were specifically added to greatly simplify the setup and testing process. PLEASE CREATE AN USER AND MANUALLY UPDATE THE ROLE TO admin   BECAUSE ONLY admin USER CAN   ACCESS IT.  
+This allows admins to create hospitals, services, and time slots quickly without manually inserting records into the database.
+
+✅ Why?
+
+Makes real-world testing and QA much smoother.
+
+Allows simulation of a full booking flow without DB seeding.
+
+This massively improves developer velocity and testing realism.
 
 🧠 Why This Architecture?
 ✅ Security-first: Proper authentication, validation, and rate-limiting.
